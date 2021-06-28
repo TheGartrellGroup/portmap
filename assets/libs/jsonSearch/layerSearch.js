@@ -266,7 +266,7 @@ function addJsonLayerFilter(source, property, search_criteria) {
                 zoom: 10
             });
         } else {
-            map.fitBounds(bbox);
+            map.fitBounds(bbox, { padding: 100 });
         }
 
     });
