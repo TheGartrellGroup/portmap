@@ -1,4 +1,6 @@
 .ctr-search-toggle {
+    border-style: solid;
+    border-color: magenta;
     background-color:#fff;
     border-radius: 4px;
     width: 28px;
@@ -11,6 +13,8 @@
 }
 
 .ctr-search-box {
+    border-style: solid;
+    border-color: magenta;
     background: #2f3640;
     opacity: 85%;
     position: absolute;
