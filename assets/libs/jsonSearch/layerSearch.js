@@ -243,55 +243,31 @@ function addJsonLayerFilter(source, property, search_criteria) {
 
     $.getJSON(filepath, function (data) {
 
-        var result = L.geoJson(data, {
+        // Filter features that meet search criteria
+        const filtered = data.features.filter((x) => {
+            const property_val = x.properties[property]
 
-            filter: function (feature, layer) {
-
-                var property_val = feature.properties[property];
-
-                if (isNaN(feature.properties[property])) {
-
-                    if (property_val === search_criteria) {
-                        return true;
-                    }
-                } else {
-                    var float_criteria = parseFloat(search_criteria);
-                    if (property_val == float_criteria) {
-                        return true;
-                    }
-
-                }
-
+            if (isNaN(property_val)) {               
+                return property_val === search_criteria ? true : false;
+            } else {
+                return property_val == parseFloat(search_criteria) ? true : false;
             }
-        }
-       );
+        });
 
-        var b = result.getBounds();
+        // Create bounding box of features
+        const bbox = turf.bbox(
+            turf.featureCollection(filtered)
+        );
 
-        var sw = new mapboxgl.LngLat(b._southWest.lng, b._southWest.lat);
-        var ne = new mapboxgl.LngLat(b._northEast.lng, b._northEast.lat);
-        var llb = new mapboxgl.LngLatBounds(sw, ne);
-
-
-        if (b._southWest.lng === b._northEast.lng && b._southWest.lat === b._northEast.lat) { //zoom to point if only one point
-
+        // Zoom to bounding box, check if point to avoid over zooming
+        if (bbox[0] === bbox[2]) {
             map.flyTo({
-                center: sw,
-                zoom: 19
+                center: [bbox[0], bbox[1]],
+                zoom: 10
             });
-
         } else {
-
-            map.fitBounds(llb, { padding: 100 });
+            map.fitBounds(bbox, { padding: 100 });
         }
-
 
     });
-
-    function isInt(n) {
-        return n % 1 === 0;
-    }
-
 }
-
-

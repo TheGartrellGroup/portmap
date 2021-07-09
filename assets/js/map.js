@@ -30,6 +30,10 @@ map.addControl(new mapboxgl.GeolocateControl({
     trackUserLocation: true
 }));
 
+map.addControl(new SearchControl({
+        source: "assets/json/layers.json"
+    }));
+
 //This overides the Bootstrap modal "enforceFocus" to allow user interaction with main map 
 $.fn.modal.Constructor.prototype.enforceFocus = function () { };
 
